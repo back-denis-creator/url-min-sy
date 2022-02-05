@@ -26,11 +26,11 @@
         {% for link in links %}
             <tr>
                 <th scope="row">{{ link.id }}</th>
-                <td><a href="#" target="_blank">{{ link.name }}</a></td>
-                <td><a href="#" target="_blank">{{ link.url }}</a></td>
+                <td><a href="{{ url('homepage') ~ 'link/' ~ link.name }}" target="_blank">{{ link.name }}</a></td>
+                <td><a href="{{ link.url }}" target="_blank">{{ link.url }}</a></td>
                 <td>{{ link.transitions }}</td>
-                <td>{{ link.lifetime | date('H:m:i')}}</td>
-                <td>{{ link.createAt | date('d.m.Y H:m:i') }}</td>
+                <td>{{ link.lifetime | date('H:i:s')}}</td>
+                <td>{{ link.createAt | date('d.m.Y H:i:s') }}</td>
             </tr>
         {% endfor %}
         </tbody>

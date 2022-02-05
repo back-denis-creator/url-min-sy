@@ -41,7 +41,7 @@ class Link
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createAt;
+    public $createAt;
 
     public function __construct()
     {

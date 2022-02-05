@@ -47,11 +47,48 @@ class LinkController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $links = $entityManager->getRepository(Link::class)->findAll();
 
-        // dd($links);
-
         return $this->render('default/link_statistic.html.twig', [
             'links' => $links
         ]);
+    }
+
+    /**
+     * @Route("/link/{name}", methods="GET|POST", name="link_transition",)
+     */
+    public function linkTransition(Request $request, string $name = ''): Response 
+    {
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $link = null;
+
+        if($name) {
+            $link = $entityManager->getRepository(Link::class)->findOneBy(['name' => (string) $name]);
+            
+            //Время которое уже прожила ссылка;
+            $timeLife = time() - $link->getCreateAt()->format('U');
+   
+            //Время жизни -> unix
+            $unixTimeLife = explode(":", $link->getLifetime()->format('H:m:i'));
+            $unixTimeLife[0] = $unixTimeLife[0] * 60 * 60;
+            $unixTimeLife[1] = $unixTimeLife[1] * 60;
+            $unixTimeLife = $unixTimeLife[0] + $unixTimeLife[1] + $unixTimeLife[2];
+
+            //Если ссылка прожила больше, положенного ей времени
+            if($timeLife < $unixTimeLife) {
+                $link->setTransitions($link->getTransitions() + 1);
+                $entityManager->persist($link);
+                $entityManager->flush();
+            }else {
+                $entityManager->remove($link);
+                $entityManager->flush();
+            }
+        }
+
+        if(empty($link)) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        return $this->redirect($link->getUrl());
     }
 
     /**
@@ -59,7 +96,6 @@ class LinkController extends AbstractController
      */
     public function linkEdit(Request $request, int $id = null): Response 
     {
-
         $entityManager = $this->getDoctrine()->getManager();
 
         if($id) {

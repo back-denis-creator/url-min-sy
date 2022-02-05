@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\HttpFoundation\Request;
@@ -119,7 +120,24 @@ class LinkController extends AbstractController
         }
 
         return $this->render('default/link_edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'id' => $link->getId()
         ]);
+    }
+
+    /**
+     * @Route("/link-delete/{id}", methods="GET", name="link_delete", requirements={"id"="\d+"})
+     */
+    public function linkDelete(Request $request, int $id = null): Response 
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        if($id) {
+            $link = $entityManager->getRepository(Link::class)->find($id);
+            $entityManager->remove($link);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('link_statistic');
     }
 }

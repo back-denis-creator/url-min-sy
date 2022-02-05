@@ -4,40 +4,87 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LinkController extends AbstractController
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", methods="GET|POST", name="homepage")
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $linkList = $entityManager->getRepository(Link::class)->findAll();
+        $link = new Link();
 
-        dd($linkList);
-        return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
+        $form = $this->createFormBuilder($link)
+            ->add('url', TextType::class)
+            ->add('lifetime', TimeType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($link);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('links_statistic', ['id' => $link->getId()]);
+        }
+
+        // dd($linkList);
+
+        return $this->render('default/link.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 
-        /**
-     * @Route("/link-add", methods="GET", name="link_add")
+    /**
+     * @Route("/links-statistic", methods="GET", name="links_statistic")
      */
-    public function linkAdd(): Response
+    public function linksStatistic(): Response
     {
-        $link = new Link();
-        $link->setName(substr(md5(uniqid(rand(1,6))), 0, 8));
-        $link->setUrl('https://test.com');
-        $time = new \DateTime();
-        $link->setLifetime($time);
+        $entityManager = $this->getDoctrine()->getManager();
+        $links = $entityManager->getRepository(Link::class)->findAll();
+
+        return $this->render('default/links_statistic.html.twig', [
+            'links' => $links
+        ]);
+    }
+
+    /**
+     * @Route("/link-edit/{id}", methods="GET|POST", name="link_edit", requirements={"id"="\d+"})
+     */
+    public function editLink(Request $request, int $id = null): Response 
+    {
 
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($link);
-        $entityManager->flush();
 
-        return $this->redirectToRoute('homepage');
+        if($id) {
+            $link = $entityManager->getRepository(Link::class)->find($id);
+        }else {
+            $link = new Link();
+        }
+
+        $form = $this->createFormBuilder($link)
+            ->add('url', TextType::class)
+            ->add('lifetime', TimeType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($link);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('link_edit', ['id' => $link->getId()]);
+        }
+
+        return $this->render('default/index.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

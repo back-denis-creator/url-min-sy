@@ -45,6 +45,7 @@ class Link
 
     public function __construct()
     {
+        $this->name = substr(md5(uniqid(rand(1,6))), 0, 8);
         $this->createAt = new DateTimeImmutable();
         $this->transitions = 0;
     }

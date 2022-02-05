@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Link;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,12 +13,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LinkController extends AbstractController
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine) {
+        $this->doctrine = $doctrine;
+    }
+
     /**
      * @Route("/", methods="GET|POST", name="homepage")
      */
     public function index(Request $request): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $link = new Link();
 
         $form = $this->createFormBuilder($link)
@@ -45,7 +51,7 @@ class LinkController extends AbstractController
      */
     public function linkStatistic(): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $links = $entityManager->getRepository(Link::class);
 
         $query = $links->createQueryBuilder('l');
@@ -63,7 +69,7 @@ class LinkController extends AbstractController
      */
     public function linkTransition(Request $request, string $name = ''): Response 
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
 
         $link = $entityManager->getRepository(Link::class)->findOneBy(['name' => (string) $name]) ?? null;
 
@@ -97,7 +103,7 @@ class LinkController extends AbstractController
      */
     public function linkEdit(Request $request, int $id = null): Response 
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
 
         if($id) {
             $link = $entityManager->getRepository(Link::class)->find($id);
@@ -130,7 +136,7 @@ class LinkController extends AbstractController
      */
     public function linkDelete(Request $request, int $id = null): Response 
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
 
         if($id) {
             $link = $entityManager->getRepository(Link::class)->find($id);

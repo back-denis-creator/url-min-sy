@@ -22,8 +22,8 @@ class LinkController extends AbstractController
         $link = new Link();
 
         $form = $this->createFormBuilder($link)
-            ->add('url', TextType::class)
-            ->add('lifetime', TimeType::class)
+            ->add('url', TextType::class, ['required' => true])
+            ->add('lifetime', TimeType::class, ['required' => true])
             ->getForm();
 
         $form->handleRequest($request);
@@ -75,7 +75,7 @@ class LinkController extends AbstractController
             $unixTimeLife[1] = $unixTimeLife[1] * 60;
             $unixTimeLife = $unixTimeLife[0] + $unixTimeLife[1] + $unixTimeLife[2];
 
-            if($timeLife < $unixTimeLife) {
+            if($timeLife < $unixTimeLife && $unixTimeLife > 60) {
                 $link->setTransitions($link->getTransitions() + 1);
                 $entityManager->persist($link);
                 $entityManager->flush();

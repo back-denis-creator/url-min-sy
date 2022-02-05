@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,25 +31,23 @@ class LinkController extends AbstractController
             $entityManager->persist($link);
             $entityManager->flush();
 
-            return $this->redirectToRoute('links_statistic', ['id' => $link->getId()]);
+            return $this->redirectToRoute('link_statistic');
         }
 
-        // dd($linkList);
-
-        return $this->render('default/link.html.twig', [
+        return $this->render('default/link_home.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("/links-statistic", methods="GET", name="links_statistic")
+     * @Route("/link-statistic", methods="GET", name="link_statistic")
      */
-    public function linksStatistic(): Response
+    public function linkStatistic(): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $links = $entityManager->getRepository(Link::class)->findAll();
 
-        return $this->render('default/links_statistic.html.twig', [
+        return $this->render('default/link_statistic.html.twig', [
             'links' => $links
         ]);
     }
@@ -58,7 +55,7 @@ class LinkController extends AbstractController
     /**
      * @Route("/link-edit/{id}", methods="GET|POST", name="link_edit", requirements={"id"="\d+"})
      */
-    public function editLink(Request $request, int $id = null): Response 
+    public function linkEdit(Request $request, int $id = null): Response 
     {
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -80,10 +77,10 @@ class LinkController extends AbstractController
             $entityManager->persist($link);
             $entityManager->flush();
 
-            return $this->redirectToRoute('link_edit', ['id' => $link->getId()]);
+            return $this->redirectToRoute('link_statistic');
         }
 
-        return $this->render('default/index.html.twig', [
+        return $this->render('default/link_edit.html.twig', [
             'form' => $form->createView()
         ]);
     }

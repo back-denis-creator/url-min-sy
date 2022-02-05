@@ -45,10 +45,15 @@ class LinkController extends AbstractController
     public function linkStatistic(): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $links = $entityManager->getRepository(Link::class)->findAll();
+        $links = $entityManager->getRepository(Link::class);
+
+        $query = $links->createQueryBuilder('l');
+        $query = $query->orderBy('l.id', 'DESC')->getQuery();
+       
+        $entities = $query->getResult();
 
         return $this->render('default/link_statistic.html.twig', [
-            'links' => $links
+            'links' => $entities
         ]);
     }
 
@@ -57,23 +62,18 @@ class LinkController extends AbstractController
      */
     public function linkTransition(Request $request, string $name = ''): Response 
     {
-
         $entityManager = $this->getDoctrine()->getManager();
-        $link = null;
 
-        if($name) {
-            $link = $entityManager->getRepository(Link::class)->findOneBy(['name' => (string) $name]);
-            
-            //Время которое уже прожила ссылка;
+        $link = $entityManager->getRepository(Link::class)->findOneBy(['name' => (string) $name]) ?? null;
+
+        if($link) {
             $timeLife = time() - $link->getCreateAt()->format('U');
    
-            //Время жизни -> unix
             $unixTimeLife = explode(":", $link->getLifetime()->format('H:m:i'));
             $unixTimeLife[0] = $unixTimeLife[0] * 60 * 60;
             $unixTimeLife[1] = $unixTimeLife[1] * 60;
             $unixTimeLife = $unixTimeLife[0] + $unixTimeLife[1] + $unixTimeLife[2];
 
-            //Если ссылка прожила больше, положенного ей времени
             if($timeLife < $unixTimeLife) {
                 $link->setTransitions($link->getTransitions() + 1);
                 $entityManager->persist($link);

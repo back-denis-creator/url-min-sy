@@ -20,6 +20,7 @@
             <th scope="col">Transitions</th>
             <th scope="col">Lifetime</th>
             <th scope="col">Created</th>
+            <th scope="col">Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,11 @@
                 <td>{{ link.transitions }}</td>
                 <td>{{ link.lifetime | date('H:i:s')}}</td>
                 <td>{{ link.createAt | date('d.m.Y H:i:s') }}</td>
+                <td>
+                <a href="{{ url('homepage') ~ 'link-edit/' ~ link.id }}">
+                Edit
+                </a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

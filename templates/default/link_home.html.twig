@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LinkController!{% endblock %}
+{% block title %}URL Minimizer{% endblock %}
 
 {% block body %}
 <style>
@@ -8,50 +8,33 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
+{% include('default/navbar.html.twig') %}
+
 <div class="example-wrapper">
-{{ form_start(form) }}
-    <div class="form-control">
-        <i class="fa fa-calendar"></i> 
-        {{ form_label(form.url) }}
-        {{ form_widget(form.url) }}
-
-        <small>{{ form_help(form.url) }}</small>
-
-        <div class="form-error">
-            {{ form_errors(form.url) }}
-        </div>
-    </div>
+    {{ form_start(form) }}
         <div class="form-control">
-        <i class="fa fa-time"></i> 
-        {{ form_label(form.lifetime) }}
-        {{ form_widget(form.lifetime) }}
+            <i class="fa fa-calendar"></i> 
+            {{ form_label(form.url) }}
+            {{ form_widget(form.url) }}
 
-        <small>{{ form_help(form.lifetime) }}</small>
+            <small>{{ form_help(form.url) }}</small>
 
-        <div class="form-error">
-            {{ form_errors(form.lifetime) }}
-        </div>
-    </div>
-<button type="submit" class="btn btn-primary mt-4">Create Link</button>
-{{ form_end(form) }}
-{# <form>
-    <div class="form-group">
-        <div class="row mt-4">
-          <div class="col-md-6">
-            <div class="input-group">
-                <label for="link" class="form-control">Link</label>
-                <input type="text"  class="form-control w-50" required id="link" placeholder="Enter link">
+            <div class="form-error">
+                {{ form_errors(form.url) }}
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="input-group">
-                 <label for="life-time" class="form-control">Lifetime</label>
-                 <input type="time"  class="form-control w-50" required id="life-time" />
-            </div>
-          </div>
         </div>
-    </div>
-      <button type="submit" class="btn btn-primary mt-4">Create Link</button>
-</form> #}
+            <div class="form-control">
+            <i class="fa fa-time"></i> 
+            {{ form_label(form.lifetime) }}
+            {{ form_widget(form.lifetime) }}
+
+            <small>{{ form_help(form.lifetime) }}</small>
+
+            <div class="form-error">
+                {{ form_errors(form.lifetime) }}
+            </div>
+        </div>
+    <button type="submit" class="btn btn-primary mt-4">Create Link</button>
+    {{ form_end(form) }}
 </div>
 {% endblock %}

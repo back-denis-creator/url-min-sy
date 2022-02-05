@@ -47,6 +47,8 @@ class LinkController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $links = $entityManager->getRepository(Link::class)->findAll();
 
+        // dd($links);
+
         return $this->render('default/link_statistic.html.twig', [
             'links' => $links
         ]);

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LinkController!{% endblock %}
+{% block title %}Link Statistic{% endblock %}
 
 {% block body %}
 <style>
@@ -8,8 +8,33 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
+{% include('default/navbar.html.twig') %}
+
 <div class="example-wrapper">
-    <p>Statistic page</p>
-    {{dump(_context.links)}}
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Link</th>
+            <th scope="col">To Url</th>
+            <th scope="col">Transitions</th>
+            <th scope="col">Lifetime</th>
+            <th scope="col">Created</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for link in links %}
+            <tr>
+                <th scope="row">{{ link.id }}</th>
+                <td><a href="#" target="_blank">{{ link.name }}</a></td>
+                <td><a href="#" target="_blank">{{ link.url }}</a></td>
+                <td>{{ link.transitions }}</td>
+                <td>{{ link.lifetime | date('H:m:i')}}</td>
+                <td>{{ link.createAt | date('d.m.Y H:m:i') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}Hello LinkController!{% endblock %}
 
 {% block body %}
 <style>
@@ -9,12 +9,24 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Denis Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/denis/Projects/url-min-sy/src/Controller/DefaultController.php'|file_link(0) }}">src/Controller/DefaultController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/denis/Projects/url-min-sy/templates/default/index.html.twig'|file_link(0) }}">templates/default/index.html.twig</a></code></li>
-    </ul>
+<form>
+    <div class="form-group">
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="input-group">
+                <label for="link" class="form-control">Link</label>
+                <input type="text"  class="form-control w-50" required id="link" placeholder="Enter link">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+                 <label for="life-time" class="form-control">Lifetime</label>
+                 <input type="time"  class="form-control w-50" required id="life-time" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-4">Create Link</button>
+    </form>
 </div>
 {% endblock %}

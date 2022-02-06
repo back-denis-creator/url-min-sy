@@ -1,6 +1,7 @@
 ## Install
 
 ```
+Connect DB, dump: url_min.sql
 yarn encore dev --watch
 symfony serve
 ```

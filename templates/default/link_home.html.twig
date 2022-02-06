@@ -3,6 +3,42 @@
 {% block title %}URL Minimizer{% endblock %}
 
 {% block body %}
+
+{% include('default/navbar.html.twig') %}
+
+<div class="example-wrapper">
+    {{ form_start(form, {'attr': {'class': 'form-link'}}) }}
+        <ul>
+            <li>
+                <div class="form-control">
+                    {{ form_label(form.url) }}
+                    {{ form_widget(form.url, {'attr': {'class': 'url-field'}}) }}
+
+                    <small>{{ form_help(form.url) }}</small>
+
+                    <div class="form-error">
+                        {{ form_errors(form.url) }}
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="form-control">
+                    {{ form_label(form.lifetime) }}
+                    {{ form_widget(form.lifetime, {'attr': {'class': 'lifetime-field'}}) }}
+
+                    <small>{{ form_help(form.lifetime) }}</small>
+
+                    <div class="form-error">
+                        {{ form_errors(form.lifetime) }}
+                    </div>
+                </div>
+            </li>
+            <li>
+                <button type="submit" class="btn-submit">Create Link</button>
+            </li>
+        </ul>
+    {{ form_end(form) }}
+</div>
 <style>
     body {
         background: #cdcdcd;
@@ -126,40 +162,4 @@
         border: 3px solid #e06b27;
     }
 </style>
-
-{% include('default/navbar.html.twig') %}
-
-<div class="example-wrapper">
-    {{ form_start(form, {'attr': {'class': 'form-link'}}) }}
-        <ul>
-            <li>
-                <div class="form-control">
-                    {{ form_label(form.url) }}
-                    {{ form_widget(form.url, {'attr': {'class': 'url-field'}}) }}
-
-                    <small>{{ form_help(form.url) }}</small>
-
-                    <div class="form-error">
-                        {{ form_errors(form.url) }}
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="form-control">
-                    {{ form_label(form.lifetime) }}
-                    {{ form_widget(form.lifetime, {'attr': {'class': 'lifetime-field'}}) }}
-
-                    <small>{{ form_help(form.lifetime) }}</small>
-
-                    <div class="form-error">
-                        {{ form_errors(form.lifetime) }}
-                    </div>
-                </div>
-            </li>
-            <li>
-                <button type="submit" class="btn-submit">Create Link</button>
-            </li>
-        </ul>
-    {{ form_end(form) }}
-</div>
 {% endblock %}

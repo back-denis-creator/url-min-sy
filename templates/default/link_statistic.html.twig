@@ -3,6 +3,41 @@
 {% block title %}Link Statistic{% endblock %}
 
 {% block body %}
+
+{% include('default/navbar.html.twig') %}
+
+<div class="example-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Link</th>
+            <th scope="col">To Url</th>
+            <th scope="col">Transitions</th>
+            <th scope="col">Lifetime</th>
+            <th scope="col">Created</th>
+            <th scope="col">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for link in links %}
+            <tr>
+                <th scope="row">{{ link.id }}</th>
+                <td><a href="{{ url('homepage') ~ 'link/' ~ link.name }}" target="_blank">{{ link.name }}</a></td>
+                <td><a href="{{ link.url }}" target="_blank">{{ link.url | slice(0, 35) ~ '...' }}</a></td>
+                <td>{{ link.transitions }}</td>
+                <td>{{ link.lifetime | date('H:i:s')}}</td>
+                <td>{{ link.createAt | date('d.m.Y H:i:s') }}</td>
+                <td>
+                    <a href="{{ url('homepage') ~ 'link-edit/' ~ link.id }}">
+                        <button class="btn-submit">Edit</button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 <style>
     .example-wrapper { 
         box-shadow: 0px 0px 82px 14px rgba(0, 0, 0, 0.16);
@@ -87,40 +122,4 @@
         border-right: none;
     }
 </style>
-
-{% include('default/navbar.html.twig') %}
-
-<div class="example-wrapper">
-    <table class="table">
-        <thead>
-            <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Link</th>
-            <th scope="col">To Url</th>
-            <th scope="col">Transitions</th>
-            <th scope="col">Lifetime</th>
-            <th scope="col">Created</th>
-            <th scope="col">Edit</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for link in links %}
-            <tr>
-                <th scope="row">{{ link.id }}</th>
-                <td><a href="{{ url('homepage') ~ 'link/' ~ link.name }}" target="_blank">{{ link.name }}</a></td>
-                <td><a href="{{ link.url }}" target="_blank">{{ link.url | slice(0, 35) ~ '...' }}</a></td>
-                <td>{{ link.transitions }}</td>
-                <td>{{ link.lifetime | date('H:i:s')}}</td>
-                <td>{{ link.createAt | date('d.m.Y H:i:s') }}</td>
-                <td>
-                    <a href="{{ url('homepage') ~ 'link-edit/' ~ link.id }}">
-                        <button class="btn-submit">Edit</button>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-</div>
 {% endblock %}

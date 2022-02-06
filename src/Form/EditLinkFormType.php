@@ -17,7 +17,8 @@ class EditLinkFormType extends AbstractType
             ->add('url', TextType::class, [
                 'required' => true,
                 'attr' => [
-                    'class' => 'url-field'
+                    'class' => 'url-field',
+                    'pattern' => "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
                 ]
             ])
             ->add('lifetime', TimeType::class, [

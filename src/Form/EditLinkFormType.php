@@ -14,8 +14,18 @@ class EditLinkFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('url', TextType::class, ['required' => true])
-            ->add('lifetime', TimeType::class, ['required' => true])
+            ->add('url', TextType::class, [
+                'required' => true,
+                'attr' => [
+                    'class' => 'url-field'
+                ]
+            ])
+            ->add('lifetime', TimeType::class, [
+                'required' => true,
+                'attr' => [
+                    'class' => 'lifetime-field'
+                ]
+            ])
         ;
     }
 

@@ -12,7 +12,7 @@
         <li>
             <div class="form-control">
                 {{ form_label(form.url) }}
-                {{ form_widget(form.url, {'attr': {'class': 'url-field'}}) }}
+                {{ form_widget(form.url) }}
                 <small>{{ form_help(form.url) }}</small>
                 <div class="form-error">
                     {{ form_errors(form.url) }}
@@ -22,7 +22,7 @@
         <li>
             <div class="form-control">
                 {{ form_label(form.lifetime) }}
-                {{ form_widget(form.lifetime, {'attr': {'class': 'lifetime-field'}}) }}
+                {{ form_widget(form.lifetime) }}
                 <small>{{ form_help(form.lifetime) }}</small>
                 <div class="form-error">
                     {{ form_errors(form.lifetime) }}

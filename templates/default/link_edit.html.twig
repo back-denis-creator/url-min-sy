@@ -4,46 +4,174 @@
 
 {% block body %}
 <style>
-    .example-wrapper { text-align: center; margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    body {
+        background: #cdcdcd;
+    }
+    .example-wrapper { 
+        box-shadow: 0px 0px 82px 14px rgba(0, 0, 0, 0.16);
+        border-radius: 15px; 
+        padding: 25px; 
+        background: #ffffff30; 
+        text-align: center; 
+        margin: 1em auto; 
+        max-width: 800px; 
+        width: 95%; 
+        font: 18px/1.5 sans-serif; 
+    }
+    .example-wrapper code { 
+        background: #F5F5F5; 
+        padding: 2px 6px; 
+    }
     .form-control {
         display: flex;
-        justify-content: center;
+    }
+    .form-link ul {
+        width: 750px;
+        list-style-type: none;
+        list-style-position: outside;
+        margin: 0px;
+        padding: 0px;
+    }
+    .form-link li{
+        padding: 12px;
+        position: relative;
+    }
+    .form-link label {
+        width: 100px;
+        text-align: end;
+        margin-top: 3px;
+        margin-right: 20px;
+        display: inline-block;
+        float: left;
+        padding: 3px;
+    }
+    .form-link input {
+        box-shadow: 0px 0px 13px 2px rgb(0 0 0 / 14%);
+        height: 20px;
+        width: 220px;
+        padding: 5px 15px;
     }
     .lifetime-field {
         padding-left: 5px;
     }
     .url-field {
         margin-left: 5px;
+        background-color: #d8cec7;
+        border-radius: 15px;
+        border: 3px solid #a19993;
+        transition: 1s;
     }
+    .required {
+        letter-spacing: 1px;
+        color: #464949;
+    }
+    #form_lifetime_hour {
+        width: auto;
+        margin-right: 7px;
+        height: 105%;
+        box-shadow: 0px 0px 13px 2px rgb(0 0 0 / 14%);
+        padding: 8px;
+        color: #464949;
+        background-color: #d8cec7;
+        border-radius: 15px;
+        border: 3px solid #a19993;
+        transition: 1s;
+        appearance: none;
+    }
+    #form_lifetime_minute {
+        width: auto;
+        margin-left: 7px;
+        height: 105%;
+        box-shadow: 0px 0px 13px 2px rgb(0 0 0 / 14%);
+        padding: 8px;
+        color: #464949;
+        background-color: #d8cec7;
+        border-radius: 15px;
+        border: 3px solid #a19993;
+        transition: 1s;
+        appearance: none;
+    }
+    .btn-submit {
+        background-color: #d8cec7;
+        border-radius: 25px;
+        border: 3px solid #a19993;
+        font-size: large;
+        color: #464949;
+        padding-left: 15px;
+        padding-right: 15px;
+        text-decoration: none;
+        padding-bottom: 3px;
+        padding-top: 3px;
+        transition: 1s;
+        text-align: center; 
+        box-shadow: 0px 0px 13px 2px rgba(0, 0, 0, 0.14);
+    }
+    .btn-submit:hover {
+        transform: scale(1.1);
+        background-color: #e2a979;
+        border: 3px solid #e06b27;
+    }
+    .url-field:focus {
+        transform: scale(1.1);
+        border: 3px solid #e06b27;
+        outline: none;
+    }
+    #form_lifetime_minute:focus {
+        transform: scale(1.1);
+        outline: none;
+        border: 3px solid #e06b27;
+    }
+    #form_lifetime_hour:focus {
+        transform: scale(1.1);
+        outline: none;
+        border: 3px solid #e06b27;
+    }
+    .delete {
+        text-align: start;
+        padding-left: 95px !important;
+    }
+
+
 </style>
 
 {% include('default/navbar.html.twig') %}
 
 <div class="example-wrapper">
-    {{ form_start(form) }}
-        <div class="form-control">
-            {{ form_label(form.url) }}
-            {{ form_widget(form.url, {'attr': {'class': 'url-field'}}) }}
+    {{ form_start(form, {'attr': {'class': 'form-link'}}) }}
+    <ul>
+        <li>
+            <div class="form-control">
+                {{ form_label(form.url) }}
+                {{ form_widget(form.url, {'attr': {'class': 'url-field'}}) }}
 
-            <small>{{ form_help(form.url) }}</small>
+                <small>{{ form_help(form.url) }}</small>
 
-            <div class="form-error">
-                {{ form_errors(form.url) }}
+                <div class="form-error">
+                    {{ form_errors(form.url) }}
+                </div>
             </div>
-        </div>
-        <div class="form-control">
-            {{ form_label(form.lifetime) }}
-            {{ form_widget(form.lifetime, {'attr': {'class': 'lifetime-field'}}) }}
+        </li>
+        <li>
+            <div class="form-control">
+                {{ form_label(form.lifetime) }}
+                {{ form_widget(form.lifetime, {'attr': {'class': 'lifetime-field'}}) }}
 
-            <small>{{ form_help(form.lifetime) }}</small>
+                <small>{{ form_help(form.lifetime) }}</small>
 
-            <div class="form-error">
-                {{ form_errors(form.lifetime) }}
+                <div class="form-error">
+                    {{ form_errors(form.lifetime) }}
+                </div>
             </div>
-        </div>
-        <a href="{{ url('homepage') ~ 'link-delete/' ~ id }}">Delete</a>
-    <button type="submit" class="btn btn-primary mt-4">Update Link</button>
+        </li>
+            <li class="delete">
+                <a class="btn-submit" type="button" href="{{ url('homepage') ~ 'link-delete/' ~ id }}">
+                    Delete
+                </a>
+            </li>
+        <li>
+            <button type="submit" class="btn-submit">Update Link</button>
+        </li>
+    </ul>
     {{ form_end(form) }}
 </div>
 {% endblock %}

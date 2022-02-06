@@ -6,18 +6,16 @@ use App\Entity\Link;
 use App\Form\EditLinkFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LinkController extends AbstractController
 {
-    private $doctrine;
+    private $entityManager;
 
     public function __construct(ManagerRegistry $doctrine) {
-        $this->doctrine = $doctrine;
+        $this->entityManager = $doctrine->getManager();
     }
 
     /**
@@ -25,7 +23,6 @@ class LinkController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $entityManager = $this->doctrine->getManager();
         $link = new Link();
 
         $form = $this->createForm(EditLinkFormType::class, $link);
@@ -33,8 +30,8 @@ class LinkController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($link);
-            $entityManager->flush();
+            $this->entityManager->persist($link);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('link_statistic');
         }
@@ -49,8 +46,7 @@ class LinkController extends AbstractController
      */
     public function linkStatistic(): Response
     {
-        $entityManager = $this->doctrine->getManager();
-        $links = $entityManager->getRepository(Link::class);
+        $links = $this->entityManager->getRepository(Link::class);
 
         $query = $links->createQueryBuilder('l');
         $query = $query->orderBy('l.id', 'DESC')->getQuery();
@@ -67,9 +63,7 @@ class LinkController extends AbstractController
      */
     public function linkTransition(Request $request, string $name = ''): Response 
     {
-        $entityManager = $this->doctrine->getManager();
-
-        $link = $entityManager->getRepository(Link::class)->findOneBy(['name' => (string) $name]) ?? null;
+        $link = $this->entityManager->getRepository(Link::class)->findOneBy(['name' => (string) $name]) ?? null;
 
         if($link) {
             $timeLife = time() - $link->getCreateAt()->format('U');
@@ -81,11 +75,11 @@ class LinkController extends AbstractController
 
             if($timeLife < $unixTimeLife && $unixTimeLife > 60) {
                 $link->setTransitions($link->getTransitions() + 1);
-                $entityManager->persist($link);
-                $entityManager->flush();
+                $this->entityManager->persist($link);
+                $this->entityManager->flush();
             }else {
-                $entityManager->remove($link);
-                $entityManager->flush();
+                $this->entityManager->remove($link);
+                $this->entityManager->flush();
             }
         }
 
@@ -101,10 +95,8 @@ class LinkController extends AbstractController
      */
     public function linkEdit(Request $request, int $id = null): Response 
     {
-        $entityManager = $this->doctrine->getManager();
-
         if($id) {
-            $link = $entityManager->getRepository(Link::class)->find($id);
+            $link = $this->entityManager->getRepository(Link::class)->find($id);
         }else {
             $link = new Link();
         }
@@ -114,8 +106,8 @@ class LinkController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($link);
-            $entityManager->flush();
+            $this->entityManager->persist($link);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('link_statistic');
         }
@@ -131,12 +123,10 @@ class LinkController extends AbstractController
      */
     public function linkDelete(Request $request, int $id = null): Response 
     {
-        $entityManager = $this->doctrine->getManager();
-
         if($id) {
-            $link = $entityManager->getRepository(Link::class)->find($id);
-            $entityManager->remove($link);
-            $entityManager->flush();
+            $link = $this->entityManager->getRepository(Link::class)->find($id);
+            $this->entityManager->remove($link);
+            $this->entityManager->flush();
         }
 
         return $this->redirectToRoute('link_statistic');

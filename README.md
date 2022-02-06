@@ -1,9 +1,9 @@
 ## Install
 
 ```
-Connect DB, dump: url_min.sql
-yarn encore dev --watch
-symfony serve
+1. Connect DB, dump: url_min.sql
+2. yarn encore dev --watch
+3. symfony serve
 ```
 ## License
 

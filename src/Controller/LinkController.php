@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Link;
+use App\Form\EditLinkFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,10 +28,7 @@ class LinkController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $link = new Link();
 
-        $form = $this->createFormBuilder($link)
-            ->add('url', TextType::class, ['required' => true])
-            ->add('lifetime', TimeType::class, ['required' => true])
-            ->getForm();
+        $form = $this->createForm(EditLinkFormType::class, $link);
 
         $form->handleRequest($request);
 
@@ -111,10 +109,7 @@ class LinkController extends AbstractController
             $link = new Link();
         }
 
-        $form = $this->createFormBuilder($link)
-            ->add('url', TextType::class)
-            ->add('lifetime', TimeType::class)
-            ->getForm();
+        $form = $this->createForm(EditLinkFormType::class, $link);
 
         $form->handleRequest($request);
 
